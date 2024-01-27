@@ -6,7 +6,7 @@ class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'email')
 
 class ChatAdmin(admin.ModelAdmin):
-    list_editable = ['is_read']
+    # list_editable = ['is_read']
     list_display = ['sender', 'receiver', 'message', 'is_read']
 
 admin.site.register(User, UserAdmin)
