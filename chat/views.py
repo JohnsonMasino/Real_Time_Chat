@@ -3,7 +3,7 @@ from .serializers import ChatSerializer
 from rest_framework.generics import ListAPIView
 from django.db.models import Q, Subquery, OuterRef
 
-# This is for the chat view
+# This is to get all messages sent to a user from many users
 class MyChatView(ListAPIView):
     serializer_class = ChatSerializer
     
