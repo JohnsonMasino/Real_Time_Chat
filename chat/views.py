@@ -60,16 +60,22 @@ class ProfileDetailView(RetrieveUpdateAPIView):
 class SearchUsersView(ListAPIView):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
-        username = self.kwargs['username']
+        username = self.kwargs.get('username')
+        if not username:
+            return Response(
+                {'detail': "No username provided"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
         logged_in_user = self.request.user
         users = Profile.objects.filter(
             Q(user__username__icontains=username) |
-            Q(full_name__icontains=username) |
-            Q(email__icontains=username) &
-            ~Q(user=logged_in_user)
+            Q(user__full_name__icontains=username) |
+            Q(user__email__icontains=username) &
+            ~Q(pk=logged_in_user.pk)
         )
         if not users.exists():
             return Response(
