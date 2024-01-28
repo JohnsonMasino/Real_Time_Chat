@@ -1,4 +1,4 @@
-from user.models import User, Chat
+from user.models import User, Chat, Profile
 from .serializers import ChatSerializer, ProfileSerializer
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView
 from django.db.models import Q, Subquery, OuterRef
@@ -53,4 +53,11 @@ class ProfileDetailView(RetrieveUpdateAPIView):
     serializer_class = ProfileSerializer
     queryset = User.objects.all()
     permission_classes = [IsAuthenticated]
+    
+# This is to search all users
+class SearchUsersView(ListAPIView):
+    serializer_class = ProfileSerializer
+    queryset = Profile.objects.all()
+    permission_classes = [IsAuthenticated]
+
     
