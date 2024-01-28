@@ -10,7 +10,8 @@ class ChatAdmin(admin.ModelAdmin):
     list_display = ['sender', 'receiver', 'message', 'is_read']
 
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ['']
+    list_display = ['username', 'email', 'sex', 'phone_number','country', 'state',
+                    'created_at', 'is_active']
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Chat, ChatAdmin)
