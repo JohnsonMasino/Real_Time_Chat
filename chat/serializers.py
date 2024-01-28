@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from user.models import User, Chat
-from user.serializers import UserSerializer
 
 class ChatSerializer(serializers.ModelSerializer):
     receiver_username = serializers.ReadOnlyField(source='receiver.username')
@@ -14,5 +13,5 @@ class ChatSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email']
+        fields = ['id', 'user', 'full_name', 'username', 'email']
         read_only_fields = ['id']
