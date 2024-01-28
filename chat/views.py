@@ -1,12 +1,13 @@
 from user.models import User, Chat
-from .serializers import ChatSerializer
-from rest_framework.generics import ListAPIView
+from .serializers import ChatSerializer, ProfileSerializer
+from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView
 from django.db.models import Q, Subquery, OuterRef
+from rest_framework.permissions import IsAuthenticated
 
 # This is to get all messages sent to a user from many users
 class MyChatView(ListAPIView):
     serializer_class = ChatSerializer
-    
+    permission_classes = [IsAuthenticated]
     def get_queryset(self):
         user_id = self.kwargs['user_id']
     
@@ -26,3 +27,30 @@ class MyChatView(ListAPIView):
             )
         ).order_by('-id')
         return messages
+    
+# This is to get all messages sent to a user from a particular user
+class MyChatView2(ListAPIView):
+    serializer_class = ChatSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        sender_id = self.kwargs['sender_id']
+        receiver_id = self.kwargs['receiver_id']
+
+        messages = Chat.objects.filter(
+            sender__in=[sender_id, receiver_id],
+            receiver__in=[sender_id, receiver_id]
+        )
+        return messages
+    
+# This is to send a message to a user
+class SendMessageView(CreateAPIView):
+    serializer_class = ChatSerializer
+    permission_classes = [IsAuthenticated]
+
+# This the profile details of a user
+class ProfileDetailView(RetrieveUpdateAPIView):
+    serializer_class = ProfileSerializer
+    queryset = User.objects.all()
+    permission_classes = [IsAuthenticated]
+    
