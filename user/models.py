@@ -15,6 +15,28 @@ class User(models.Model):
     def __str__(self):
         return self.username
     
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=100, blank=True)
+    last_name = models.CharField(max_length=150, blank=True)
+    username = models.CharField(max_length=100, blank=True)
+    bio = models.TextField(max_length=1000, blank=True)
+    sex = models.CharField(max_length=1, default='M', blank=True)
+    profile_pic = models.ImageField(upload_to='profile_pics', blank=True)
+    date_of_birth = models.DateField(null=True, blank=True)
+    phone_number = models.CharField(max_length=15, blank=True)
+    email = models.EmailField(null=True, blank=True)
+    country = models.CharField(max_length=50, null=True)
+    state = models.CharField(max_length=200, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.user.username} Profile"
+    
+    class Meta:
+        ordering = ['-created_at']
 
 # This is a chat model
 class Chat(models.Model):

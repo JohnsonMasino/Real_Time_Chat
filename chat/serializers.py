@@ -9,8 +9,10 @@ class ChatSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chat
         fields = ['id', 'user', 'sender', 'sender_username', 'receiver', 'receiver_username', 'message', 'is_read', 'created_at']
-        read_only_fields = ['id', 'is_read', 'created_at']
-        extra_kwargs = {
-            'sender': {'read_only': True},
-            'receiver': {'read_only': True}
-        }
+        read_only_fields = ['id']
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email']
+        read_only_fields = ['id']
