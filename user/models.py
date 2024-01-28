@@ -1,4 +1,7 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Create your models here.
 class User(models.Model):
@@ -8,7 +11,7 @@ class User(models.Model):
     is_active = models.BooleanField(default=True)
 
     class Meta:
-        verbose_name_plural = 'Customised User'
+        verbose_name_plural = 'Custom User'
 
     # USERNAME_FIELD = 'email'
 
@@ -37,6 +40,18 @@ class Profile(models.Model):
     
     class Meta:
         ordering = ['-created_at']
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
+
+post_save.connect(create_user_profile, sender=User)
+post_save.connect(save_user_profile, sender=User)
 
 # This is a chat model
 class Chat(models.Model):
